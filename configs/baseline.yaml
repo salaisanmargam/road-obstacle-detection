@@ -1,0 +1,37 @@
+project:
+  title: "Weather- and Illumination-Robust Road Damage and Obstacle Detection"
+  phase: "phase1_baseline"
+
+seed: 42
+
+dataset:
+  paths_config: "configs/paths.yaml"
+  yolo_dataset_yaml: "data/dataset.yaml"
+
+training:
+  model: "yolov8n.pt"
+  imgsz: 640
+  batch: 8
+  epochs: 20
+  cpu_fallback_epochs: 1
+  cpu_fallback_imgsz: 512
+  cpu_fallback_batch: 2
+  fraction: 0.1
+  patience: 10
+  device: "auto"
+  workers: 4
+  optimizer: "auto"
+  lr0: 0.01
+  cos_lr: false
+  amp: true
+  project_dir: "experiments/phase1_baseline"
+  run_name_prefix: "run"
+
+evaluation:
+  conf: 0.25
+  iou: 0.6
+  max_det: 300
+
+visualization:
+  num_qualitative_examples: 24
+  random_state: 42

@@ -1,0 +1,25 @@
+dataset_root: D:\road obstacle detection\rdd2022\RDD_SPLIT
+splits:
+  train:
+    images: D:\road obstacle detection\rdd2022\RDD_SPLIT\train\images
+    labels: D:\road obstacle detection\rdd2022\RDD_SPLIT\train\labels
+  val:
+    images: D:\road obstacle detection\rdd2022\RDD_SPLIT\val\images
+    labels: D:\road obstacle detection\rdd2022\RDD_SPLIT\val\labels
+  test:
+    images: D:\road obstacle detection\rdd2022\RDD_SPLIT\test\images
+    labels: D:\road obstacle detection\rdd2022\RDD_SPLIT\test\labels
+project_root: D:\road obstacle detection\road_damage_research
+artifacts:
+  dataset_statistics: results/phase1/dataset_statistics.json
+  dataset_audit_report: reports/phase1/dataset_audit_report.md
+  invalid_samples: results/phase1/dataset_invalid_samples.json
+environment:
+  os: Windows-11-10.0.26200-SP0
+  python_version: 3.13.5
+  cuda_available: true
+  gpu_name: NVIDIA GeForce RTX 2050
+  gpu_vram_mb: 4096
+  torch_installed: true
+  torch_version: 2.12.1+cpu
+  cuda_available_torch: false

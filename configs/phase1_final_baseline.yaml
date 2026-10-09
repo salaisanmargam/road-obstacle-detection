@@ -1,0 +1,81 @@
+# Phase 1 — Final Research-Grade Baseline Configuration
+# -------------------------------------------------------
+# Replaces the 1-epoch/10%-data sanity-check experiment.
+# Laptop-safe settings for NVIDIA GeForce RTX 2050 (4 GB VRAM).
+# Training time budget: up to 12 hours with early stopping.
+
+project:
+  title: "Weather- and Illumination-Robust Road Damage and Obstacle Detection"
+  phase: "phase1_final_baseline"
+  seed: 42
+
+dataset:
+  yolo_dataset_yaml: "data/dataset_final.yaml"
+  dataset_root: "D:/road obstacle detection/rdd2022/RDD_SPLIT"
+
+training:
+  model: "yolov8n.pt"          # YOLOv8 Nano – lightweight, ~3M params, suits RTX 2050
+  imgsz: 640                   # Standard input size
+  batch: 8                     # Safe for 4GB VRAM with AMP; ~2.5–3.0 GB usage
+  epochs: 100                  # Max epochs; early stopping will halt earlier
+  patience: 30                 # Stop if val mAP@50 stagnates for 30 epochs
+  device: "0"                  # GPU 0 (RTX 2050)
+  workers: 2                   # Laptop-safe: avoid CPU/thermal overload
+  amp: true                    # FP16 mixed precision — halves VRAM, speeds training
+  cache: false                 # Don't cache dataset in RAM (only 16 GB)
+  fraction: 1.0                # 100% of training data
+  optimizer: "SGD"
+  lr0: 0.01
+  lrf: 0.01                    # Final LR = lr0 * lrf
+  momentum: 0.937
+  weight_decay: 0.0005
+  warmup_epochs: 3.0
+  warmup_momentum: 0.8
+  cos_lr: true                 # Cosine LR schedule for smoother convergence
+  # Standard YOLOv8 augmentation — no exotic additions for clean baseline
+  hsv_h: 0.015
+  hsv_s: 0.7
+  hsv_v: 0.4
+  degrees: 0.0
+  translate: 0.1
+  scale: 0.5
+  fliplr: 0.5
+  mosaic: 1.0
+  mixup: 0.0
+  project_dir: "experiments/phase1_final_baseline"
+  run_name: "final"
+
+evaluation:
+  conf: 0.001                  # Low conf threshold for mAP computation (standard)
+  iou: 0.6
+  max_det: 300
+
+hyperparameter_search:
+  enabled: true
+  search_epochs: 15            # Short runs to compare configs
+  project_dir: "experiments/phase1_hp_search"
+  configs:
+    A:
+      lr0: 0.01
+      optimizer: "SGD"
+      mosaic: 1.0
+      mixup: 0.0
+      cos_lr: true
+    B:
+      lr0: 0.001
+      optimizer: "SGD"
+      mosaic: 1.0
+      mixup: 0.0
+      cos_lr: true
+    C:
+      lr0: 0.001
+      optimizer: "AdamW"
+      mosaic: 1.0
+      mixup: 0.0
+      cos_lr: false
+    D:
+      lr0: 0.01
+      optimizer: "SGD"
+      mosaic: 0.5
+      mixup: 0.0
+      cos_lr: true
